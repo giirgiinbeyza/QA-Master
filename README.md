@@ -14,8 +14,7 @@ Bu proje; karmaşık Excel dosyaları veya pahalı lisanslı ürünler arasında
 
 ## 🎥 Proje Tanıtım Videosu
 
-Projenin tüm özelliklerini, Admin/User yetki farklarını ve kullanım senaryolarını aşağıdaki videodan izleyebilirsiniz:
-
+Bu dokümanda (README) sınırlı sayıda görsel kullanıldığından; projenin tüm özelliklerini, Admin/User yetki farklarını ve detaylı kullanım senaryolarını aşağıdaki videodan izlemenizi öneririm:
 [![QA Master Tanıtım](https://img.youtube.com/vi/JNbWjPrlitc/0.jpg)](https://www.youtube.com/watch?v=JNbWjPrlitc)
 
 
@@ -54,15 +53,20 @@ Sistemde güvenlik en üst düzeyde tutulmuş olup, kullanıcılar yetkilerine g
     - Özel tasarım **"Kırmızı Güvenlik Paneli"** üzerinden giriş yapar.
     - Test senaryolarını **Silme, Düzenleme ve Ekleme** tam yetkisine sahiptir.
     - Sistemin genel durumunu grafiklerle analiz edebilir.
-     - ![Yönetici Yetkinlikleri ](https://github.com/user-attachments/assets/b2fbde23-48ad-4893-b554-2838529a5188)
+    - ![ Yönetici Admin Girişi ](https://github.com/user-attachments/assets/0452a13b-4e77-4928-a5ff-940f5d53bd96).
+    - ![ Yönetici Admin Yetkinlikleri ](https://github.com/user-attachments/assets/d50b2d0d-11a1-4e0f-b763-5f974c42afaf).
+
 
 - **Standart Personel (Member):**
     - Sadece veri girişi ve görüntüleme yapabilir.
     - **Kritik verileri silme yetkisi yoktur** (Arayüzde silme butonları gizlenir).
+    - ![Standart Personel Girişi](https://github.com/user-attachments/assets/f6854fad-ef50-4c39-8f2f-31301f4e8932)
+    - ![Standart Personel Yetkinlikleri ](https://github.com/user-attachments/assets/b2fbde23-48ad-4893-b554-2838529a5188)
+
 
 
 ### 📊 2. Dashboard ve Veri Görselleştirme
-Yöneticiler için hazırlanan Dashboard ekranında, projedeki testlerin başarı/hata oranları (Pass/Fail) **dinamik pasta grafikleri** ile sunulmaktadır.
+ Dashboard ekranımızda, projedeki testlerin başarı/hata oranları (Pass/Fail) **dinamik pasta grafikleri** ile sunulmaktadır.
 ![Admin Dashboard](https://github.com/user-attachments/assets/0da59a8b-2e85-4ab5-a322-a9f7cf7cc7ea)
 
 ### 📗 3. Geleneksel Yöntemlerle Uyumluluk (Excel Entegrasyonu)
@@ -75,6 +79,7 @@ Alışkanlıklarından vazgeçemeyen veya raporlamayı Excel'de yapmak isteyen e
 - Projelerin modüllere bölünerek yönetilmesi.
 - İlişkisel veritabanı yapısı sayesinde veri bütünlüğünün korunması.
 - Test durumlarının (Pass, Fail, Blocked) renk kodları ile görselleştirilmesi.
+
 
 ---
 
