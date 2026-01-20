@@ -1,0 +1,91 @@
+@model DermaLogic.Models.TestCase
+
+@{
+    ViewData["Title"] = "Testi Düzenle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0 fw-bold">✏️ Test Senaryosunu Düzenle</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="ImagePath" /> <input type="hidden" asp-for="CreatedDate" /> <div class="form-group mb-3">
+                            <label asp-for="Title" class="control-label fw-bold">Test Senaryosu</label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="TestType" class="control-label fw-bold">Test Türü</label>
+                            <select asp-for="TestType" class="form-select">
+                                <option value="Fonksiyonel Test">Fonksiyonel Test</option>
+                                <option value="Performans (Yük) Testi">⚡ Performans (Yük) Testi</option>
+                                <option value="Kullanıcı Arayüzü (UI)">🎨 Kullanıcı Arayüzü (UI)</option>
+                                <option value="Güvenlik Testi">🔒 Güvenlik Testi</option>
+                                <option value="API Testi">🔌 API Testi</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Steps" class="control-label fw-bold">Test Adımları</label>
+                            <textarea asp-for="Steps" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="Steps" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="ExpectedResult" class="control-label fw-bold text-success">Beklenen Sonuç</label>
+                            <textarea asp-for="ExpectedResult" class="form-control border-success" rows="2"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Priority" class="control-label fw-bold">Öncelik</label>
+                                    <select asp-for="Priority" class="form-select">
+                                        <option value="Düşük">Düşük</option>
+                                        <option value="Orta">Orta</option>
+                                        <option value="Yüksek">Yüksek</option>
+                                        <option value="Kritik">Kritik</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Status" class="control-label fw-bold">Durum</label>
+                                    <select asp-for="Status" class="form-select">
+                                        <option value="Koşulmadı">⚠️ Koşulmadı</option>
+                                        <option value="Başarılı">✅ Başarılı</option>
+                                        <option value="Hatalı">❌ Hatalı</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+    <label class="control-label text-white fw-bold">Testi Yapacak Kişi (Atama)</label>
+    <select asp-for="AssignedTo" class="form-control" asp-items="ViewBag.UserList">
+        <option value="">-- Henüz Atanmadı --</option>
+    </select>
+    <span asp-validation-for="AssignedTo" class="text-danger"></span>
+</div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="TestModuleId" class="control-label fw-bold">Modül</label>
+                            <select asp-for="TestModuleId" class="form-control" asp-items="ViewBag.TestModuleId"></select>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <input type="submit" value="💾 Değişiklikleri Kaydet" class="btn btn-primary btn-lg shadow-sm" />
+                            <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

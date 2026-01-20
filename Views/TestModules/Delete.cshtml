@@ -1,0 +1,38 @@
+@model DermaLogic.Models.TestModule
+
+@{
+    ViewData["Title"] = "Modülü Sil";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0 border-top border-danger border-4">
+                <div class="card-body p-5 text-center">
+                    
+                    <div class="mb-4">
+                        <span style="font-size: 3rem;">🗑️</span>
+                    </div>
+
+                    <h3 class="text-danger fw-bold mb-3">Silmek İstediğinize Emin misiniz?</h3>
+                    <p class="text-muted">
+                        Aşağıdaki modül kalıcı olarak silinecektir. Bu işlem geri alınamaz.
+                    </p>
+
+                    <div class="alert alert-light border d-inline-block text-start p-3 mb-4" style="min-width: 300px;">
+                        <p class="mb-1"><strong>Modül Adı:</strong> @Html.DisplayFor(model => model.Name)</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> @Html.DisplayFor(model => model.Description)</p>
+                    </div>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-center gap-2">
+                            <a asp-action="Index" class="btn btn-secondary px-4">İptal</a>
+                            <input type="submit" value="🔥 Evet, Sil" class="btn btn-danger px-4" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

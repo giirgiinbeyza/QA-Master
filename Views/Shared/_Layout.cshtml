@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QA Master</title>
+    
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DermaLogic.styles.css" asp-append-version="true" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark box-shadow mb-3" style="background-color: #112240; border-bottom: 1px solid #233554;">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">
+                    🚀 QA Master
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="TestModules" asp-action="Index">Modüller</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="TestCases" asp-action="Index">Test Senaryoları</a>
+                            </li>
+                        </ul>
+                        
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <span class="nav-link text-white-50 me-2">👤 @User.Identity.Name</span>
+                            </li>
+                            
+                            <li class="nav-item">
+    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+        <button type="submit" class="btn btn-outline-danger btn-sm mt-1">
+            Çıkış Yap 🚪
+        </button>
+    </form>
+</li>
+                            </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                        </ul>
+                    }
+                    
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-auto" style="background-color: #0a192f; border-color: #233554;">
+        <div class="container text-center py-3">
+            &copy; 2026 - QA Master - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-info">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var mesaj = @Json.Serialize(TempData["SuccessMessage"]);
+                
+                Swal.fire({
+                    title: 'Başarılı!',
+                    text: mesaj, 
+                    icon: 'success',
+                    confirmButtonText: 'Tamam',
+                    confirmButtonColor: '#10b981',
+                    background: '#112240',
+                    color: '#ffffff'
+                });
+            });
+        </script>
+    }
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

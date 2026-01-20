@@ -1,0 +1,205 @@
+@model IEnumerable<DermaLogic.Models.TestCase>
+
+@{
+    ViewData["Title"] = "Test Listesi";
+}
+
+<style>
+    .step-cell {
+        position: relative;
+        cursor: help;
+    }
+
+    .step-tooltip {
+        visibility: hidden;
+        width: 350px;
+        background-color: #2c3e50;
+        color: #fff;
+        text-align: left;
+        border-radius: 6px;
+        padding: 10px 15px;
+        position: absolute;
+        z-index: 999;
+        top: 100%;
+        left: 0;
+        opacity: 0;
+        transition: opacity 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        white-space: pre-line;
+    }
+
+    .step-cell:hover .step-tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary fw-bold">Test Senaryoları</h1>
+        
+        <div>
+            <button onclick="exportToExcel()" class="btn btn-outline-success btn-lg shadow-sm me-2">
+                📊 Excel İndir
+            </button>
+            
+            <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">
+                ➕ Yeni Test Ekle
+            </a>
+        </div>
+    </div>
+
+    <div class="card bg-light mb-4 border-0 shadow-sm">
+        <div class="card-body p-3">
+            <form asp-controller="TestCases" asp-action="Index" method="get">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0">🔍</span>
+                            <input type="text" name="searchString" value="@ViewBag.CurrentFilter" class="form-control border-start-0" placeholder="Test başlığı veya adımı ara..." />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="statusFilter" class="form-select">
+                            <option value="">-- Tüm Durumlar --</option>
+                            <option value="Başarılı" selected="@(ViewBag.CurrentStatus == "Başarılı")">✅ Başarılı</option>
+                            <option value="Hatalı" selected="@(ViewBag.CurrentStatus == "Hatalı")">❌ Hatalı</option>
+                            <option value="Koşulmadı" selected="@(ViewBag.CurrentStatus == "Koşulmadı")">⚠️ Koşulmadı</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+                    </div>
+                </div>
+                @if (!string.IsNullOrEmpty(ViewBag.CurrentFilter) || !string.IsNullOrEmpty(ViewBag.CurrentStatus))
+                {
+                    <div class="mt-2 text-end">
+                        <a asp-action="Index" class="text-danger text-decoration-none small">❌ Filtreleri Temizle</a>
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0 align-middle" id="testTable">
+                <thead>
+                    <tr>
+                        <th class="ps-3">@Html.DisplayNameFor(model => model.Title)</th>
+                        <th class="text-white">Atanan Kişi</th> 
+                        <th>@Html.DisplayNameFor(model => model.Steps)</th>
+                        <th>@Html.DisplayNameFor(model => model.Priority)</th>
+                        <th>@Html.DisplayNameFor(model => model.Status)</th>
+                        <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
+                        <th>Modül</th>
+                        <th class="text-end pe-3">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-bold">@Html.DisplayFor(modelItem => item.Title)</td>
+                            
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.AssignedTo))
+                                {
+                                    <span class="badge bg-info text-dark" style="font-size: 0.9rem;">
+                                        👤 @item.AssignedTo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary" style="opacity: 0.5;">Atanmadı</span>
+                                }
+                            </td>
+                            <td style="max-width: 250px;">
+                                <div class="step-cell">
+                                    <div class="text-truncate text-muted small">
+                                        @item.Steps
+                                    </div>
+                                    <div class="step-tooltip">
+                                        <strong>📝 Test Adımları:</strong><br/>
+                                        @item.Steps
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                @if (item.Priority == "Yüksek" || item.Priority == "Kritik")
+                                {
+                                    <span class="badge-pro badge-soft-danger">
+                                        <i class="fas fa-arrow-up"></i> @item.Priority
+                                    </span>
+                                }
+                                else if (item.Priority == "Orta")
+                                {
+                                    <span class="badge-pro badge-soft-info">
+                                        <i class="fas fa-minus"></i> @item.Priority
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge-pro badge-soft-warning" style="color: #94a3b8; border-color: #475569;">
+                                        <i class="fas fa-arrow-down"></i> @item.Priority
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.Status == "Başarılı")
+                                {
+                                    <span class="badge-pro badge-soft-success">
+                                        <i class="fas fa-check-circle"></i> Başarılı
+                                    </span>
+                                }
+                                else if (item.Status == "Hatalı")
+                                {
+                                    <span class="badge-pro badge-soft-danger">
+                                        <i class="fas fa-times-circle"></i> Hatalı
+                                    </span>
+                                }
+                                else if (item.Status == "Koşulmadı")
+                                {
+                                    <span class="badge-pro badge-soft-warning">
+                                        <i class="fas fa-clock"></i> Koşulmadı
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge-pro badge-soft-info">@item.Status</span>
+                                }
+                            </td>
+                            <td>@item.CreatedDate.ToString("dd.MM.yyyy")</td>
+                            <td>@Html.DisplayFor(modelItem => item.TestModule.Name)</td>
+                            <td class="text-end pe-3">
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detay</a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+    function exportToExcel() {
+        var table = document.getElementById("testTable");
+        
+        var wb = XLSX.utils.table_to_book(table, {sheet: "Test Senaryoları"});
+        
+        XLSX.writeFile(wb, "Test_Raporu.xlsx");
+    }
+</script>

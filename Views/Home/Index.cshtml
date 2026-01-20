@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+   
+    <div class="text-center mb-5 animate-fade-in">
+        <h1 class="display-4 fw-bold text-primary">Test Yönetim Paneli</h1>
+        <p class="lead text-white-50">Proje test durumlarının anlık özeti aşağıdadır.</p>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3 shadow border-0">
+                <div class="card-header bg-transparent border-0 fw-bold">Toplam Senaryo</div>
+                <div class="card-body">
+                    <h1 class="card-title text-center display-4">@(ViewBag.TotalTests ?? 0)</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3 shadow border-0">
+                <div class="card-header bg-transparent border-0 fw-bold">Başarılı (Pass)</div>
+                <div class="card-body">
+                    <h1 class="card-title text-center display-4">@(ViewBag.PassTests ?? 0)</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3 shadow border-0">
+                <div class="card-header bg-transparent border-0 fw-bold">Hatalı (Fail)</div>
+                <div class="card-body">
+                    <h1 class="card-title text-center display-4">@(ViewBag.FailTests ?? 0)</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-dark bg-warning mb-3 shadow border-0">
+                <div class="card-header bg-transparent border-0 fw-bold">Koşulmadı</div>
+                <div class="card-body">
+                    <h1 class="card-title text-center display-4 text-white">@(ViewBag.NotRunTests ?? 0)</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-md-6 text-center">
+            <a asp-controller="TestModules" asp-action="Index" class="btn btn-outline-primary btn-lg w-75 py-3 rounded-pill fw-bold border-2">
+                📂 Modülleri Yönet
+            </a>
+        </div>
+        <div class="col-md-6 text-center">
+            <a asp-controller="TestCases" asp-action="Index" class="btn btn-primary w-75 py-3 rounded-pill fw-bold shadow-lg">
+                🧪 Test Senaryolarına Git
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0" style="background-color: #112240;">
+                <div class="card-header text-white fw-bold border-bottom border-secondary" style="background-color: #0a192f;">
+                    📊 Test Dağılım Grafiği
+                </div>
+                <div class="card-body">
+                    <canvas id="testChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById('testChart');
+            if (!ctx) return;
+
+            var passCount = @(ViewBag.PassTests ?? 0);
+            var failCount = @(ViewBag.FailTests ?? 0);
+            var notRunCount = @(ViewBag.NotRunTests ?? 0);
+
+            // Veri yoksa grafik boş kalmasın diye örnek veri (Opsiyonel)
+            if (passCount === 0 && failCount === 0 && notRunCount === 0) {
+                 // Eğer veri tabanından 0 geliyorsa grafikte göstermek için geçici:
+                 // passCount = 1; failCount = 1; notRunCount = 1; 
+            }
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Başarılı', 'Hatalı', 'Koşulmadı'],
+                    datasets: [{
+                        data: [passCount, failCount, notRunCount],
+                        backgroundColor: ['#198754', '#dc3545', '#ffc107'],
+                        borderColor: '#112240',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#ffffff', font: { size: 14 } }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
+else
+{
+   
+    <div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="text-center mb-5 animate-fade-in">
+            <div class="mb-4"><span style="font-size: 5rem;">🚀</span></div>
+            <h1 class="display-3 fw-bold text-white mb-3">QA <span class="text-primary">Master</span></h1>
+            <p class="lead text-white-50 mb-5">Modern test yönetim platformuna hoş geldiniz.</p>
+
+            <div class="d-flex justify-content-center gap-3">
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary btn-lg px-5 py-3 shadow-lg fw-bold rounded-pill">🔐 Giriş Yap</a>
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-light btn-lg px-5 py-3 fw-bold rounded-pill">📝 Kayıt Ol</a>
+                <div class="mt-4">
+    <a asp-controller="Access" asp-action="AdminLogin" class="text-white-50 text-decoration-none small" style="border-bottom: 1px dashed #666;">
+        🔒 Yönetici Girişi (Admin)
+    </a>
+</div>
+            </div>
+        </div>
+    </div>
+}

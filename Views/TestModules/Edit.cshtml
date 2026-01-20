@@ -1,0 +1,40 @@
+@model DermaLogic.Models.TestModule
+
+@{
+    ViewData["Title"] = "Modülü Düzenle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0 fw-bold">✏️ Modülü Düzenle</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Name" class="control-label fw-bold">Modül Adı</label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="control-label fw-bold">Açıklama</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <input type="submit" value="💾 Kaydet" class="btn btn-primary shadow-sm" />
+                            <a asp-action="Index" class="btn btn-outline-secondary">İptal / Listeye Dön</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

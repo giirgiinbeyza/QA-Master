@@ -1,0 +1,135 @@
+@model DermaLogic.Models.TestCase
+
+@{
+    ViewData["Title"] = "Test Detayı";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">📋 Test Senaryo Raporu</h5>
+                    <div>
+                        @if(!string.IsNullOrEmpty(Model.TestType))
+                        {
+                            <span class="badge bg-warning text-dark me-2">@Model.TestType</span>
+                        }
+                        <span class="badge bg-light text-primary">ID: #@Model.Id</span>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    
+                    <h2 class="card-title text-center text-white fw-bold mb-4">@Model.Title</h2>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-white-50 text-uppercase">Modül</h6>
+                            <p class="fs-5 fw-bold text-white">@Model.TestModule.Name</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <h6 class="text-white-50 text-uppercase">Tarih</h6>
+                            <p class="fs-5 text-white">@Model.CreatedDate.ToString("dd.MM.yyyy")</p>
+                        </div>
+                    </div>
+
+                    <hr class="border-secondary" />
+
+                    <div class="mb-4">
+                        <h6 class="text-white-50 text-uppercase">Test Adımları</h6>
+                        
+                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                        {
+                            <div class="mb-4">
+                                <h6 class="text-white-50 text-uppercase">Hata Kanıtı / Ekran Görüntüsü</h6>
+                                <div class="text-center p-2 border rounded" style="background-color: rgba(255,255,255,0.05);">
+                                    <img src="~/images/@Model.ImagePath" class="img-fluid rounded shadow-sm" style="max-height: 400px;" alt="Test Kanıtı" />
+                                    <br />
+                                    <a href="~/images/@Model.ImagePath" target="_blank" class="btn btn-sm btn-link mt-2 text-info">
+                                        🔍 Resmi Büyüt
+                                    </a>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="p-3 bg-light rounded border text-dark" style="white-space: pre-line;">
+                            @Model.Steps
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.ExpectedResult))
+{
+    <div class="alert alert-success border-success mt-3 shadow-sm">
+        <h6 class="fw-bold text-success mb-2">🎯 Beklenen Sonuç:</h6>
+        
+        <div style="color: black !important; white-space: pre-line; font-weight: 500;">
+            @Model.ExpectedResult
+        </div>
+    </div>
+}
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-white-50 text-uppercase">Öncelik</h6>
+                            @if (Model.Priority == "Yüksek" || Model.Priority == "Kritik")
+                            {
+                                <span class="badge bg-danger p-2 w-100">🔥 @Model.Priority</span>
+                            }
+                            else if (Model.Priority == "Orta")
+                            {
+                                <span class="badge bg-info text-dark p-2 w-100">⚖️ @Model.Priority</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary p-2 w-100">🔽 @Model.Priority</span>
+                            }
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-white-50 text-uppercase">Son Durum</h6>
+                            @if (Model.Status == "Başarılı")
+                            {
+                                <div class="alert alert-success text-center m-0 p-1 fw-bold">
+                                    ✅ BAŞARILI (PASS)
+                                </div>
+                            }
+                            else if (Model.Status == "Hatalı")
+                            {
+                                <div class="alert alert-danger text-center m-0 p-1 fw-bold">
+                                    ❌ HATALI (FAIL)
+                                </div>
+                            }
+                            else if (Model.Status == "Koşulmadı")
+                            {
+                                <div class="alert alert-warning text-center m-0 p-1 fw-bold">
+                                    ⚠️ KOŞULMADI
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-secondary text-center m-0 p-1">
+                                    @Model.Status
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer p-3 d-flex justify-content-between" style="background-color: #0f1d36; border-top: 1px solid #233554;">
+                    <a asp-action="Index" class="btn btn-outline-light">
+                        ⬅️ Listeye Dön
+                    </a>
+                    
+                    <div>
+                        <button onclick="window.print()" class="btn btn-outline-info me-2">
+                            🖨️ Yazdır / PDF
+                        </button>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                            ✏️ Düzenle
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
