@@ -7,22 +7,14 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(20);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.AddDbContext<DermaLogicDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => 
 {
@@ -36,33 +28,33 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Access/Login";        
     options.LogoutPath = "/Access/Logout";      
     options.AccessDeniedPath = "/Access/AccessDenied"; 
-    
-    // Cookie Ayarları
     options.Cookie.Name = "DermaLogicCookie";
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.SlidingExpiration = true;
 });
-// ************************************************************************
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// --- 5. Dil Ayarları ---
 var trCulture = new CultureInfo("tr-TR");
 trCulture.NumberFormat.NumberDecimalSeparator = ",";
 trCulture.NumberFormat.CurrencyDecimalSeparator = ",";
-
 var supportedCultures = new[] { trCulture };
 
 app.UseRequestLocalization(new RequestLocalizationOptions
@@ -72,7 +64,6 @@ app.UseRequestLocalization(new RequestLocalizationOptions
     SupportedUICultures = supportedCultures
 });
 
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -81,20 +72,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 
 app.UseAuthentication(); 
 app.UseAuthorization();  
-
 app.UseSession(); 
-
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())
@@ -110,7 +96,5 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "Roller oluşturulurken hata çıktı.");
     }
 }
-
-app.Run();
 
 app.Run();
