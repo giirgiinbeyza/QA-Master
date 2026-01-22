@@ -106,7 +106,7 @@ Projeyi kendi bilgisayarınızda çalıştırmak için:
     ```
 2.  Proje klasörüne gidin:
     ```bash
-    cd QA-Master
+    cd QA-Master-Main
     ```
 3.  Veritabanını oluşturun (Migration):
     ```bash
